@@ -1,0 +1,7 @@
+mongo_uri = ""
+elastic_uri = ""
+database = "sample_mflix"
+app_name = "example-rs"
+collection = "comments"
+port = 8080
+search_index = "kibana_sample_data_ecommerce"
