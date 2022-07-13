@@ -26,4 +26,8 @@ impl CommentService {
     pub async fn get_by_id<'a>(&self, id: &str) -> Result<CommentResponse, Cow<'a, str>> {
         self.repository.get_by_id(id).await.map(|comment| CommentResponse::new(comment))
     }
+
+    pub async fn is_exist_by_name<'a>(&self, name: &str) -> Result<bool, Cow<'a, str>> {
+        self.repository.is_exist_by_name(name).await
+    }
 }

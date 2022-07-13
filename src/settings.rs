@@ -13,6 +13,8 @@ pub struct Settings {
     pub collection: String,
     pub port: u16,
     pub search_index: String,
+    pub auth_header_name: String,
+    pub auth_header_value: String,
 }
 
 impl Settings {

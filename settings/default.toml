@@ -5,3 +5,5 @@ app_name = "example-rs"
 collection = "comments"
 port = 8080
 search_index = "kibana_sample_data_ecommerce"
+auth_header_name = "X-Blyad-Value"
+auth_header_value = "hehe"

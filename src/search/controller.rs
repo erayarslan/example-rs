@@ -5,7 +5,7 @@ use crate::json_error::Error;
 use crate::search::model::SearchRequest;
 
 pub async fn search(app_state: State<app_state::AppState>, _req: HttpRequest, query: Query<SearchRequest>) -> Result<HttpResponse, Error> {
-    let q = query.q.as_ref().map(|x| x.as_str());
+    let q = query.q.as_ref().map(|x| x.as_ref());
 
     let result = app_state.service_container.search_service.search(q).await;
 

@@ -46,4 +46,13 @@ impl CommentRepository {
             Err(e) => Err(Cow::from(e.to_string()))
         }
     }
+
+    pub async fn is_exist_by_name<'a>(&self, name: &str) -> Result<bool, Cow<'a, str>> {
+        let result = self.collection.find_one(doc! {"name": name}, None).await;
+
+        match result {
+            Ok(cursor) => Ok(cursor.is_some()),
+            Err(e) => Err(Cow::from(e.to_string()))
+        }
+    }
 }

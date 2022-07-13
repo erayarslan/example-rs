@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 use elasticsearch::{Elasticsearch, SearchParts};
-use serde_json::json;
 use crate::search::model::{ElasticResponse, Order};
+use crate::search::query;
 use crate::settings;
 
 #[derive(Clone)]
@@ -17,19 +17,7 @@ impl SearchRepository {
     }
 
     pub async fn search<'a>(&self, q: Option<&'a str>) -> Result<ElasticResponse<Order>, Cow<'a, str>> {
-        let body = q.map(|n| json!({
-            "query": {
-                "term": {
-                    "sku": {
-                        "value": n
-                    }
-                }
-            }
-        })).unwrap_or(json!({
-            "query": {
-                "match_all": {}
-            }
-        }));
+        let body = q.map(|n| query::sku(n)).unwrap_or(query::default());
 
         let result = self.client
             .search(SearchParts::Index(&[&settings::SETTINGS.search_index]))

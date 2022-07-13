@@ -3,6 +3,7 @@ mod comment;
 mod search;
 mod settings;
 mod app_state;
+mod utils;
 
 use std::env;
 use elasticsearch::Elasticsearch;
@@ -67,6 +68,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_state(app_state.clone())
             .wrap(middleware::Logger::default())
+            .wrap(utils::auth_middleware::Auth::default())
             .service((
                 resource("/comments").route(web::get().to(comment::controller::get)),
                 resource("/comments/{id}").route(web::get().to(comment::controller::get_by_id)),

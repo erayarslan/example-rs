@@ -7,7 +7,7 @@ use crate::json_error::Error;
 
 pub async fn get(app_state: State<app_state::AppState>, _req: HttpRequest, query: Query<CommentRequest>) -> Result<HttpResponse, Error> {
     let size = query.size.unwrap_or(20i64);
-    let name = query.name.as_ref().map(|x| x.as_str());
+    let name = query.name.as_ref().map(|x| x.as_ref());
 
     let result = app_state.service_container.comment_service.get(name, size).await;
 
