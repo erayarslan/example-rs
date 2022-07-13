@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use crate::comment::model::CommentResponse;
 use crate::comment::repository::CommentRepository;
 
@@ -11,7 +12,7 @@ impl CommentService {
         CommentService { repository }
     }
 
-    pub async fn get(&self, name: Option<&String>, size: i64) -> Result<Vec<CommentResponse>, String> {
+    pub async fn get<'a>(&self, name: Option<&'a str>, size: i64) -> Result<Vec<CommentResponse>, Cow<'a, str>> {
         let results = self.repository.get(name, size).await;
 
         match results {
@@ -22,7 +23,7 @@ impl CommentService {
         }
     }
 
-    pub async fn get_by_id(&self, id: &str) -> Result<CommentResponse, String> {
+    pub async fn get_by_id<'a>(&self, id: &str) -> Result<CommentResponse, Cow<'a, str>> {
         self.repository.get_by_id(id).await.map(|comment| CommentResponse::new(comment))
     }
 }

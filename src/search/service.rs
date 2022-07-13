@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use crate::search::model::Order;
 use crate::search::repository::SearchRepository;
 
@@ -11,7 +12,7 @@ impl SearchService {
         SearchService { repository }
     }
 
-    pub async fn search(&self, q: Option<&String>) -> Result<Vec<Order>, String> {
+    pub async fn search<'a>(&self, q: Option<&'a str>) -> Result<Vec<Order>, Cow<'a, str>> {
         self.repository
             .search(q)
             .await

@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use elasticsearch::{Elasticsearch, SearchParts};
 use serde_json::json;
 use crate::search::model::{ElasticResponse, Order};
@@ -15,7 +16,7 @@ impl SearchRepository {
         }
     }
 
-    pub async fn search(&self, q: Option<&String>) -> Result<ElasticResponse<Order>, String> {
+    pub async fn search<'a>(&self, q: Option<&'a str>) -> Result<ElasticResponse<Order>, Cow<'a, str>> {
         let body = q.map(|n| json!({
             "query": {
                 "term": {
@@ -43,10 +44,10 @@ impl SearchRepository {
                 let response_result = response.json::<ElasticResponse<Order>>().await;
                 match response_result {
                     Ok(text) => Ok(text),
-                    Err(e) => Err(e.to_string())
+                    Err(e) => Err(Cow::from(e.to_string()))
                 }
             }
-            Err(e) => Err(e.to_string())
+            Err(e) => Err(Cow::from(e.to_string()))
         }
     }
 }

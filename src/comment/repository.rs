@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use futures::TryStreamExt;
 use mongodb::{Collection, Database};
 use mongodb::bson::doc;
@@ -18,29 +19,31 @@ impl CommentRepository {
         }
     }
 
-    pub async fn get(&self, name: Option<&String>, size: i64) -> Result<Vec<Comment>, String> {
+    pub async fn get<'a>(&self, name: Option<&'a str>, size: i64) -> Result<Vec<Comment>, Cow<'a, str>> {
         let find_options = FindOptions::builder().limit(size).build();
         let query = name.map(|n| doc! {"name": n}).unwrap_or(doc! {});
         let result = self.collection.find(query, find_options).await;
 
         match result {
             Ok(cursor) => Ok(cursor.try_collect().await.unwrap_or_else(|_| vec![])),
-            Err(e) => Err(e.to_string())
+            Err(e) => Err(e.to_string().into())
         }
     }
 
-    pub async fn get_by_id(&self, id: &str) -> Result<Comment, String> {
+    pub async fn get_by_id<'a>(&self, id: &str) -> Result<Comment, Cow<'a, str>> {
         let object_id_result = oid::ObjectId::from_str(id);
 
         match object_id_result {
             Ok(object_id) => {
                 let result = self.collection.find_one(doc! {"_id": object_id}, None).await;
                 match result {
-                    Ok(cursor) => cursor.ok_or(String::from("not found")),
-                    Err(e) => Err(e.to_string())
+                    Ok(cursor) => {
+                        cursor.ok_or(Cow::from("not found"))
+                    }
+                    Err(e) => Err(Cow::from(e.to_string()))
                 }
             }
-            Err(e) => Err(e.to_string())
+            Err(e) => Err(Cow::from(e.to_string()))
         }
     }
 }
