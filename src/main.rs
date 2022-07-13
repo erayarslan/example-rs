@@ -4,6 +4,7 @@ mod search;
 mod settings;
 mod app_state;
 mod utils;
+mod status;
 
 use std::env;
 use elasticsearch::Elasticsearch;
@@ -73,6 +74,7 @@ async fn main() -> std::io::Result<()> {
                 resource("/comments").route(web::get().to(comment::controller::get)),
                 resource("/comments/{id}").route(web::get().to(comment::controller::get_by_id)),
                 resource("/search").route(web::get().to(search::controller::search)),
+                resource("/status").route(web::get().to(status::controller::status)),
             ))
     })
         .bind(format!("0.0.0.0:{}", settings::SETTINGS.port))?
