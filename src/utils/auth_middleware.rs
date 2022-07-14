@@ -76,7 +76,26 @@ impl<S, Err> Service<WebRequest<Err>> for AuthMiddleware<S>
                 .await
                 .unwrap_or(false);
 
-            if is_valid_with_config || is_valid_with_mongo {
+            let is_auth_valid = is_valid_with_config || is_valid_with_mongo;
+
+            let payload = format!("is_auth_valid={}", is_auth_valid);
+
+            let is_produced = app_state
+                .map_or(
+                    Either::Right(err(Cow::from("app_state not found"))),
+                    |app_state| {
+                        Either::Left(
+                            app_state
+                                .service_container
+                                .kafka_service
+                                .produce(req.path(), payload.as_str())
+                        )
+                    },
+                )
+                .await
+                .unwrap_or(false);
+
+            if is_auth_valid && is_produced {
                 let res = svc.call(req).await?;
                 Ok(res)
             } else {

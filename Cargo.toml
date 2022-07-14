@@ -17,3 +17,4 @@ ntex = { version = "0.5.21", features = ["tokio"] }
 config = "0.13.1"
 lazy_static = "1.4.0"
 elasticsearch = "7.10.1-alpha.1"
+rdkafka = { version = "0.28.0", features = ["cmake-build", "sasl"] }

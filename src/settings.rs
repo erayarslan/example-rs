@@ -3,8 +3,16 @@ use config::{Config, ConfigError, File};
 use lazy_static::lazy_static;
 use serde::Deserialize;
 
-#[derive(Deserialize, Clone)]
-#[allow(unused)]
+#[derive(Deserialize)]
+pub struct Kafka {
+    pub servers: String,
+    pub username: String,
+    pub password: String,
+    pub group_id: String,
+    pub topic: String,
+}
+
+#[derive(Deserialize)]
 pub struct Settings {
     pub mongo_uri: String,
     pub elastic_uri: String,
@@ -15,6 +23,7 @@ pub struct Settings {
     pub search_index: String,
     pub auth_header_name: String,
     pub auth_header_value: String,
+    pub kafka: Kafka,
 }
 
 impl Settings {
