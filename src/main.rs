@@ -10,6 +10,7 @@ mod kafka;
 use std::{env, thread};
 use elasticsearch::Elasticsearch;
 use elasticsearch::http::transport::Transport;
+use libexample_sys::hello_world;
 use mongodb::{options::ClientOptions, Client, Database};
 use mongodb::bson::doc;
 use ntex::web;
@@ -73,6 +74,13 @@ async fn get_app_state() -> State<app_state::AppState> {
 
     let _ = thread::spawn(move || {
         runtime.block_on(async move {
+            tokio::task::spawn_blocking(
+                || {
+                    hello_world();
+                })
+                .await
+                .expect("hello_world fucked");
+
             kafka::service::KafkaService::new(&kafka_config)
                 .consume(&settings::SETTINGS.kafka.topic)
                 .await
@@ -90,7 +98,7 @@ async fn get_app_state() -> State<app_state::AppState> {
 
 #[ntex::main]
 async fn main() -> std::io::Result<()> {
-    env::set_var("RUST_LOG", "ntex=info,librdkafka=trace,rdkafka::client=debug");
+    env::set_var("RUST_LOG", "ntex=info,librdkafka=info,rdkafka::client=info");
     env_logger::init();
 
     let app_state = get_app_state().await;

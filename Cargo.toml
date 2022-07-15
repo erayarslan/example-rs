@@ -3,8 +3,6 @@ name = "example-rs"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 mongodb = "2.2.2"
 env_logger = "0.9"
@@ -18,3 +16,4 @@ config = "0.13.1"
 lazy_static = "1.4.0"
 elasticsearch = "7.10.1-alpha.1"
 rdkafka = { version = "0.28.0", features = ["cmake-build", "sasl"] }
+libexample-sys = { path = "libexample-sys", version = "0.1.0" }

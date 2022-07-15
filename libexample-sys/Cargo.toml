@@ -1,0 +1,15 @@
+[package]
+name = "libexample-sys"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[build-dependencies]
+bindgen = "0.60.1"
+cc = "1.0.73"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+libc = "0.2.126"
