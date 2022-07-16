@@ -10,7 +10,7 @@ mod kafka;
 use std::{env, thread};
 use elasticsearch::Elasticsearch;
 use elasticsearch::http::transport::Transport;
-use libexample_sys::hello_world;
+use libexample;
 use mongodb::{options::ClientOptions, Client, Database};
 use mongodb::bson::doc;
 use ntex::web;
@@ -74,7 +74,7 @@ async fn get_app_state() -> State<app_state::AppState> {
 
     let _ = thread::spawn(move || {
         runtime.block_on(async move {
-            let output = hello_world().await;
+            let output = libexample::hello_world().await;
             println!("Output from binding: {}", output);
 
             kafka::service::KafkaService::new(&kafka_config)
