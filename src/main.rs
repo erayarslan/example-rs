@@ -74,12 +74,8 @@ async fn get_app_state() -> State<app_state::AppState> {
 
     let _ = thread::spawn(move || {
         runtime.block_on(async move {
-            tokio::task::spawn_blocking(
-                || {
-                    hello_world();
-                })
-                .await
-                .expect("hello_world fucked");
+            let output = hello_world().await;
+            println!("Output from binding: {}", output);
 
             kafka::service::KafkaService::new(&kafka_config)
                 .consume(&settings::SETTINGS.kafka.topic)

@@ -5,9 +5,9 @@ edition = "2021"
 
 [dependencies]
 mongodb = "2.2.2"
-env_logger = "0.9"
+env_logger = "0.9.0"
 json = "0.12"
-futures = "0.3"
+futures = "0.3.21"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.19.2", features = ["macros"] }

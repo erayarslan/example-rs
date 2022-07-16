@@ -8,8 +8,12 @@ build = "build.rs"
 bindgen = "0.60.1"
 cc = "1.0.73"
 
+[dev-dependencies]
+futures = "0.3.21"
+
 [lib]
 path = "src/lib.rs"
 
 [dependencies]
 libc = "0.2.126"
+futures-util = { version = "0.3.21", default-features = false }

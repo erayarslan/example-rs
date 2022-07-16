@@ -1,1 +1,1 @@
-void hello_world();
+const char* hello_world();
