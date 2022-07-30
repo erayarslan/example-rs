@@ -15,6 +15,7 @@ use mongodb::{options::ClientOptions, Client, Database};
 use mongodb::bson::doc;
 use ntex::web;
 use ntex::web::{middleware, App, server, resource, types::State};
+use ntex_cors::Cors;
 use rdkafka::ClientConfig;
 use tokio::runtime::Runtime;
 
@@ -104,6 +105,7 @@ async fn main() -> std::io::Result<()> {
             .app_state(app_state.clone())
             .wrap(middleware::Logger::default())
             .wrap(utils::auth_middleware::Auth::default())
+            .wrap(Cors::new().finish())
             .service((
                 resource("/comments").route(web::get().to(comment::controller::get)),
                 resource("/comments/{id}").route(web::get().to(comment::controller::get_by_id)),

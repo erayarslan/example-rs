@@ -1,4 +1,4 @@
 /target
-.idea
+/.idea
 example-rs.iml
 settings/dev.toml
